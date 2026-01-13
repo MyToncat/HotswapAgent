@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>hotswap-agent-core</artifactId>
+    <name>hotswap-agent-core</name>
 
     <profiles>
         <profile>
@@ -64,7 +65,7 @@
         </profile>
         <profile>
             <activation>
-                <jdk>21</jdk>
+                <jdk>[21,)</jdk>
             </activation>
             <build>
                 <plugins>
