@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -164,7 +164,7 @@ public class ResteasyRegistryPlugin {
             ReflectionHelper.invoke(cmd, cmdClass, "setupCmd",
                     new Class[] { ClassLoader.class, Object.class, Object.class, String.class, java.lang.Class.class },
                     classLoader, servletContext, servletContainerDispatcher, name, original);
-            scheduler.scheduleCommand(cmd, timeout);
+            scheduler.scheduleCommandOnClassesRedefinedOrTimeout(cmd, timeout);
         } catch (Exception e) {
             LOGGER.error("refreshClass() exception {}.", e.getMessage());
         }

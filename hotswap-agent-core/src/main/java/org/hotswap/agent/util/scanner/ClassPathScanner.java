@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -52,26 +52,38 @@ public class ClassPathScanner implements Scanner {
         LOGGER.trace("Scanning path {}", path);
         // find all directories - classpath directory or JAR
         Enumeration<URL> en = classLoader == null ? ClassLoader.getSystemResources(path) : classLoader.getResources(path);
+
         while (en.hasMoreElements()) {
             URL pluginDirURL = en.nextElement();
-            File pluginDir = new File(pluginDirURL.getFile());
-            if (pluginDir.isDirectory()) {
-                scanDirectory(pluginDir, visitor);
-            } else {
-                // JAR file
-                String uri;
+
+            // Only treat as File for real filesystem URLs
+            if ("file".equalsIgnoreCase(pluginDirURL.getProtocol())) {
+                File pluginDir;
                 try {
-                    uri = pluginDirURL.toURI().toString();
-                } catch (URISyntaxException e) {
-                    throw new IOException("Illegal directory URI " + pluginDirURL, e);
+                    pluginDir = java.nio.file.Paths.get(pluginDirURL.toURI()).toFile();
+                } catch (Exception e) {
+                    pluginDir = new File(pluginDirURL.getPath());
                 }
 
-                if (uri.startsWith(JAR_URL_PREFIX) || uri.startsWith(ZIP_URL_PREFIX)) {
-                    String jarFile = uri.substring(uri.indexOf(':') + 1); // remove the prefix
-                    scanJar(jarFile, visitor);
-                } else {
-                    LOGGER.warning("Unknown resource type of file " + uri);
+                if (pluginDir.isDirectory()) {
+                    scanDirectory(pluginDir, visitor);
+                    continue;
                 }
+            }
+
+            // JAR (or other) resource
+            final String uri;
+            try {
+                uri = pluginDirURL.toURI().toString();
+            } catch (URISyntaxException e) {
+                throw new IOException("Illegal directory URI " + pluginDirURL, e);
+            }
+
+            if (uri.startsWith(JAR_URL_PREFIX) || uri.startsWith(ZIP_URL_PREFIX)) {
+                String jarFile = uri.substring(uri.indexOf(':') + 1); // remove the prefix
+                scanJar(jarFile, visitor);
+            } else {
+                LOGGER.warning("Unknown resource type of file " + uri);
             }
         }
     }

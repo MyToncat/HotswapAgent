@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -35,12 +35,7 @@ public class ProxyClassLoadingDelegate {
 
     private static AgentLogger LOGGER = AgentLogger.getLogger(ProxyClassLoadingDelegate.class);
 
-    private static final ThreadLocal<Boolean> MAGIC_IN_PROGRESS = new ThreadLocal<>() {
-        @Override
-        protected Boolean initialValue() {
-            return false;
-        }
-    };
+    private static final ThreadLocal<Boolean> MAGIC_IN_PROGRESS = ThreadLocal.withInitial(() -> false);
 
     public static final void beginProxyRegeneration() {
         MAGIC_IN_PROGRESS.set(true);

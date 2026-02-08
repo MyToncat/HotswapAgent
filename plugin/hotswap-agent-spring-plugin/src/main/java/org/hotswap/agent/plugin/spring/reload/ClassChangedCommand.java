@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -24,10 +24,8 @@ import org.hotswap.agent.logging.AgentLogger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Add changed Class to SpringChangedAgent.

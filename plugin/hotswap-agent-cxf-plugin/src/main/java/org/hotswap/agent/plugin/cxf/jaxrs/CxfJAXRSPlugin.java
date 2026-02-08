@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -51,7 +51,7 @@ public class CxfJAXRSPlugin {
 
 
     private static final int WAIT_ON_REDEFINE = 300; // Should be bigger then DI plugins (CDI..)
-    private static final int WAIT_ON_CREATE = 600; // Should be bigger then DI plugins (CDI..)
+    private static final int WAIT_ON_CREATE = 600;   // Should be bigger then DI plugins (CDI..)
 
     @Init
     ClassLoader appClassLoader;
@@ -140,7 +140,7 @@ public class CxfJAXRSPlugin {
             Command cmd = (Command) cmdClass.newInstance();
             ReflectionHelper.invoke(cmd, cmdClass, "setupCmd", new Class[] { ClassLoader.class, Object.class },
                     classLoader, classResourceInfoProxy);
-            scheduler.scheduleCommand(cmd, timeout);
+            scheduler.scheduleCommandOnClassesRedefinedOrTimeout(cmd, timeout);
         } catch (Exception e) {
             LOGGER.error("refreshClass() exception {}.", e.getMessage());
         }

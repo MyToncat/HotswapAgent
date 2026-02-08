@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -32,6 +32,7 @@ public class OwbClassSignatureHelper {
     private static AgentLogger LOGGER = AgentLogger.getLogger(OwbClassSignatureHelper.class);
 
     private static final ClassSignatureElement[] SIGNATURE_ELEM_PROXY = {
+            ClassSignatureElement.SUPER_SIGNATURES,
             ClassSignatureElement.SUPER_CLASS,
             ClassSignatureElement.INTERFACES,
             ClassSignatureElement.CLASS_ANNOTATION,
@@ -45,6 +46,7 @@ public class OwbClassSignatureHelper {
     };
 
     private static final ClassSignatureElement[] SIGNATURE_ELEM_METHOD_FIELDS = {
+            ClassSignatureElement.SUPER_SIGNATURES,
             ClassSignatureElement.SUPER_CLASS,
             ClassSignatureElement.INTERFACES,
             ClassSignatureElement.CLASS_ANNOTATION,

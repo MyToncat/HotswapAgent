@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -68,21 +68,11 @@ public class BeanReloadExecutor {
 
     private static AgentLogger LOGGER = AgentLogger.getLogger(BeanReloadExecutor.class);
 
-    /**
-     * Reload bean in existing bean manager.
-     *
-     * @param bdaId the Bean Deployment Archive ID
-     * @param beanClass the bean class
-     * @param oldFullSignatures the old full signatures
-     * @param oldSignatures the old signatures
-     * @param strReloadStrategy the str reload strategy
-     */
-    public static void reloadBean(String bdaId, Class<?> beanClass, Map<String, String> oldFullSignatures,
+    public static void reloadBean(String bdaId, BeanManagerImpl beanManager, Class<?> beanClass, Map<String, String> oldFullSignatures,
             Map<String, String> oldSignatures, String strReloadStrategy) {
 
         BeanReloadStrategy reloadStrategy;
 
-        // check if it is Object descendant (not interface)
         if (!Object.class.isAssignableFrom(beanClass)) {
             return;
         }
@@ -93,22 +83,16 @@ public class BeanReloadExecutor {
             reloadStrategy = BeanReloadStrategy.NEVER;
         }
 
-        doReloadBean(bdaId, beanClass, oldFullSignatures, oldSignatures, reloadStrategy);
+        doReloadBean(bdaId, beanManager, beanClass, oldFullSignatures, oldSignatures, reloadStrategy);
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked", "serial" })
-    private static void doReloadBean(String bdaId, Class<?> beanClass, Map<String, String> oldFullSignatures,
+    private static void doReloadBean(String bdaId, BeanManagerImpl beanManager, Class<?> beanClass, Map<String, String> oldFullSignatures,
             Map<String, String> oldSignatures, BeanReloadStrategy reloadStrategy) {
 
-        BeanManagerImpl beanManager = null;
-        BeanManager bm = CDI.current().getBeanManager();
-
-        if (bm instanceof WeldManager) {
-            bm = ((WeldManager) bm).unwrap();
-        }
-
-        if (bm instanceof BeanManagerImpl) {
-            beanManager = (BeanManagerImpl) bm;
+        if (beanManager == null) {
+            LOGGER.error("Bean reloading failed. BeanManager is null.");
+            return;
         }
 
         // TODO: check if archive is excluded
