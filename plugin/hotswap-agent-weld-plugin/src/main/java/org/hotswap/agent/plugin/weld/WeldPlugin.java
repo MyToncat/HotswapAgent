@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -247,7 +247,7 @@ public class WeldPlugin {
                 String oldSignatureForProxyCheck = WeldClassSignatureHelper.getSignatureForProxyClass(original);
                 String oldSignatureByStrategy = WeldClassSignatureHelper.getSignatureByStrategy(beanReloadStrategy, original);
                 String oldFullSignature = ClassSignatureComparerHelper.getJavaClassSignature(original, ClassSignatureElement.values());
-                scheduler.scheduleCommand(new BeanClassRefreshCommand(classLoader, archivePath, registeredProxiedBeans,
+                scheduler.scheduleCommandOnClassesRedefinedOrTimeout(new BeanClassRefreshCommand(classLoader, archivePath, registeredProxiedBeans,
                         original.getName(), oldFullSignature, oldSignatureForProxyCheck, oldSignatureByStrategy, beanReloadStrategy), WAIT_ON_REDEFINE);
             }
         } catch (Exception e) {

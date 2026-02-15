@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -210,9 +210,12 @@ public class ClassLoaderDefineClassPatcher {
         // exclude synthetic classloader where it does not make any sense
 
         // sun.reflect.DelegatingClassLoader - created automatically by JVM to optimize reflection calls
+        // ByteArrayClassLoader - created by ByteBuddy for dynamic dispatchers (e.g. Mockito inline mocks)
         return classLoader != null &&
                 !classLoader.getClass().getName().equals("sun.reflect.DelegatingClassLoader") &&
-                !classLoader.getClass().getName().equals("jdk.internal.reflect.DelegatingClassLoader")
+                !classLoader.getClass().getName().equals("jdk.internal.reflect.DelegatingClassLoader") &&
+                !classLoader.getClass().getName().equals("net.bytebuddy.dynamic.loading.ByteArrayClassLoader") &&
+                !classLoader.getClass().getName().equals("net.bytebuddy.utility.dispatcher.JavaDispatcher$DynamicClassLoader")
                 ;
     }
 }

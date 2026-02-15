@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -155,6 +155,10 @@ public class SpringChangedAgent implements SpringListener<SpringEvent<?>>, Compa
     public static void destroyBeanFactory(AbstractAutowireCapableBeanFactory beanFactory) {
         if (!(beanFactory instanceof DefaultListableBeanFactory)) {
             return;
+        }
+        SpringChangedAgent springChangedAgent = springChangeAgents.get(beanFactory);
+        if (springChangedAgent != null) {
+            SpringEventSource.INSTANCE.removeListener(springChangedAgent);
         }
         springChangeAgents.remove(beanFactory);
     }
