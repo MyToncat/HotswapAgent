@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -42,12 +42,7 @@ public class ClassResourceInfoProxyHelper {
 
     private static Class<?> classResourceInfoProxyClass = null;
 
-    private static final ThreadLocal<Boolean> DISABLE_PROXY_GENERATION = new ThreadLocal<>() {
-        @Override
-        protected Boolean initialValue() {
-            return false;
-        }
-    };
+    private static final ThreadLocal<Boolean> DISABLE_PROXY_GENERATION = ThreadLocal.withInitial(() -> false);
 
     private static synchronized void createProxyClass(ClassResourceInfo cri) {
         if (classResourceInfoProxyClass == null) {

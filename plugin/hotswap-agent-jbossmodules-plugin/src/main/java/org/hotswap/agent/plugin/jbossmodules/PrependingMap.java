@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -65,13 +65,13 @@ public class PrependingMap implements Map {
     public Object get(Object paramObject) {
         Object list = masterMap.get(paramObject);
         if (prependList != null) {
-           // TODO : is there any situation when there is no path registered in the ModuleClassLoader
-           // and prepending loader should be returned?
-//            if (list == null) {
-//                List result = new ArrayList();
-//                result.addAll((List) prependList);
-//                return result;
-//            }
+            // There is no path registered in the ModuleClassLoader when new package is created
+            // and prepending loader should be returned
+            if (list == null) {
+                List result = new ArrayList();
+                result.addAll((List) prependList);
+                return result;
+            }
             if (list instanceof List){
                 List result = new ArrayList<>((List) prependList);
                 result.addAll((List)list);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -84,13 +84,13 @@ public class VaadinIntegration {
             // Vaadin 14.2+
             getInstanceMethod = ApplicationRouteRegistry.class.getMethod("getInstance", VaadinContext.class);
             getInstanceMethodParam = vaadinServlet.getService().getContext();
-        } catch (NoSuchMethodException ex1) {
+        } catch (NoSuchMethodError | NoSuchMethodException ex1) {
             // In Vaadin 14.1, this method instead takes a ServletContext parameter
             LOGGER.debug("ApplicationRouteRegistry::getInstance(VaadinContext) not found");
             try {
                 getInstanceMethod = ApplicationRouteRegistry.class.getMethod("getInstance", ServletContext.class);
                 getInstanceMethodParam = vaadinServlet.getServletContext();
-            } catch (NoSuchMethodException ex2) {
+            } catch (NoSuchMethodError | NoSuchMethodException ex2) {
                 // In Vaadin 14.1, this method takes a ServletContext parameter
                 LOGGER.warning("Unable to obtain ApplicationRouteRegistry instance; routes are not updated ");
                 return;

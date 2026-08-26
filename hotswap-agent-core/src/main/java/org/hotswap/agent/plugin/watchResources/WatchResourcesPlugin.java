@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -93,7 +93,9 @@ public class WatchResourcesPlugin {
                 .initializePlugin(WatchResourcesPlugin.class.getName(), appClassLoader);
 
         // and init it with watchResources path
-        plugin.init(watchResources);
+        if (plugin != null) {
+            plugin.init(watchResources);
+        }
     }
 
     /**

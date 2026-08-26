@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>hotswap-agent-plugins</artifactId>
+    <name>hotswap-agent-plugins</name>
     <description>POM with ALL HotswapAgent plugins.</description>
 
     <packaging>pom</packaging>
@@ -254,7 +255,7 @@
             <groupId>org.hotswapagent</groupId>
             <artifactId>hotswap-agent-ibatis-plugin</artifactId>
             <version>${project.version}</version>
-        </dependency>        
+        </dependency>
 
         <dependency>
             <groupId>org.hotswapagent</groupId>
@@ -287,4 +288,68 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.7.3</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>ossrh</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!-- Flattened plugin does not include pom packaging. Need to duplicate the info here -->
+    <url>http://hotswapagent.org/</url>
+    <scm>
+        <url>https://github.com/HotswapProjects/HotswapAgent</url>
+        <connection>scm:git:git://github.com/HotswapProjects/HotswapAgent.git</connection>
+        <developerConnection>scm:git:git@github.com:HotswapProjects/HotswapAgent.git</developerConnection>
+    </scm>
+
+    <issueManagement>
+        <system>git</system>
+        <url>https://github.com/HotswapProjects/HotswapAgent/issues</url>
+    </issueManagement>
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>http://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <email>jiri.bubnik@gmail.com</email>
+            <name>Jiri Bubnik</name>
+            <url>http://jiribubnik.cz</url>
+            <id>edudant</id>
+        </developer>
+        <developer>
+            <email>lada.dvorak7@gmail.com</email>
+            <name>Vladimir Dvorak</name>
+            <url>https://github.com/skybber</url>
+            <id>skybber</id>
+        </developer>
+    </developers>
 </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -184,6 +184,20 @@ public class ModuleClassLoaderTransformer {
         } catch (NotFoundException e) {
             LOGGER.warning("Unable to find method \"getAllPaths()\" in org.jboss.modules.Paths.", e);
         }
+    }
+
+    /**
+     *
+     * @param classPool the class pool
+     * @param ctClass the ct class
+     * @throws NotFoundException the not found exception
+     * @throws CannotCompileException the cannot compile exception
+     */
+    @OnClassLoadEvent(classNameRegexp = "org.jboss.modules.Module")
+    public static void patchModule(ClassPool classPool, CtClass ctClass) throws NotFoundException, CannotCompileException {
+        ctClass.getDeclaredMethod("getPathsUnchecked").insertAfter(
+                "return new org.hotswap.agent.plugin.jbossmodules.MapOrDefault($_, java.util.Collections.singletonList(this.moduleClassLoader.getLocalLoader()));"
+        );
     }
 
     public static void logSetExtraClassPathException(Exception e)

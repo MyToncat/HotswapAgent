@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2025 the HotswapAgent authors.
+ * Copyright 2013-2026 the HotswapAgent authors.
  *
  * This file is part of HotswapAgent.
  *
@@ -26,11 +26,10 @@ import org.hotswap.agent.plugin.hotswapper.HotSwapper;
 import org.hotswap.agent.plugin.jvm.ClassInitPlugin;
 import org.hotswap.agent.util.ReflectionHelper;
 import org.hotswap.agent.util.test.WaitHelper;
-import org.junit.Test;
 
 public class ClassInitTest {
 
-//    @Test
+    // @Test
     public void testStatic1() throws Exception {
         StaticTest1 o = new StaticTest1();
         ClassInitPlugin.reloadFlag = true;
@@ -46,15 +45,29 @@ public class ClassInitTest {
         assertEquals(ReflectionHelper.get(o, "obj3"), StaticTest2.obj3); // must have new value ("obj2")
     }
 
-//    @Test
+    // @Test
     public void testEnumAddRemove() throws Exception {
         Enum1 enum1 = Enum1.ITEM_1;
         ClassInitPlugin.reloadFlag = true;
-        int lenEnum1 = Enum1.values().length;
+
+        int ordinal = 0;
+        for (Enum1 e : Enum1.values()) {
+            System.out.printf("%s: 0x%08x%n", e.name(), System.identityHashCode(e));
+            assertEquals(ordinal, e.ordinal());
+            ordinal++;
+        }
 
         swapClasses(Enum1.class, Enum2.class.getName());
 
         assertEquals(enum1.values().length, Enum2.values().length);
+        assertEquals(Enum1.class.getEnumConstants().length, Enum2.class.getEnumConstants().length);
+
+        ordinal = 0;
+        for (Enum1 e : Enum1.values()) {
+            System.out.printf("%s: 0x%08x%n", e.name(), System.identityHashCode(e));
+            assertEquals(ordinal, e.ordinal());
+            ordinal++;
+        }
 
         assertEquals(ReflectionHelper.get(enum1, "ITEM_1"), enum1); // new ITEM_1 is same instance like enum1
 
@@ -77,20 +90,28 @@ public class ClassInitTest {
         assertFalse(wasException);
     }
 
-//    @Test
+    // @Test
     public void testEnumRemove() throws Exception {
-        Enum3 enum1 = Enum3.ITEM_1;
-        Enum3 enum3 = Enum3.ITEM_3;
-
-        int lenEnum4 = Enum4.values().length;
-
         ClassInitPlugin.reloadFlag = true;
+
+        int ordinal = 0;
+        for (Enum3 e : Enum3.values()) {
+            System.out.printf("%s: 0x%08x%n", e.name(), System.identityHashCode(e));
+            assertEquals(ordinal, e.ordinal());
+            ordinal++;
+        }
+
         swapClasses(Enum3.class, Enum4.class.getName());
 
-        assertEquals(Enum3.values().length, lenEnum4);
+        assertEquals(Enum3.values().length, Enum4.values().length);
+        assertEquals(Enum3.class.getEnumConstants().length, Enum4.class.getEnumConstants().length);
 
-        assertEquals(Enum3.values()[0], enum1); // must be kept from  original
-        assertEquals(Enum3.values()[1], enum3); // must be kept and shifted
+        ordinal = 0;
+        for (Enum3 e : Enum3.values()) {
+            System.out.printf("%s: 0x%08x%n", e.name(), System.identityHashCode(e));
+            assertEquals(ordinal, e.ordinal());
+            ordinal++;
+        }
     }
 
     private void swapClasses(Class<?> cls1, String class2Name) throws Exception {
